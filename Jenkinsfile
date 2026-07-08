@@ -1,0 +1,43 @@
+pipeline {
+
+    agent any
+
+    stages {
+
+        stage('Checkout') {
+            steps {
+                echo 'Downloading Code'
+            }
+        }
+
+        stage('Compile') {
+            steps {
+                bat 'javac Calculator.java'
+            }
+        }
+
+        stage('Run Program') {
+            steps {
+                bat 'java Calculator'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                bat 'docker build -t calculator-demo .'
+            }
+        }
+
+        stage('Run Docker Container') {
+            steps {
+                bat 'docker run --rm calculator-demo'
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Pipeline Executed Successfully'
+        }
+    }
+}
